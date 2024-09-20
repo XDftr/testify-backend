@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ This file is part of Testify.
+  ~
+  ~ Testify is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Testify is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Testify.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2024 Deniel Konstantinov.
+  -->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1.0.0-create-initial-tables" author="Deniel Konstantinov">
+        <createTable tableName="user_role">
+            <column name="user_role_id" type="serial">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_role_user_role_id"/>
+            </column>
+            <column name="user_role_name" type="varchar(50)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="uk_user_role_user_role_name"/>
+            </column>
+        </createTable>
+
+        <insert tableName="user_role">
+            <column name="user_role_name" value="Admin"/>
+        </insert>
+        <insert tableName="user_role">
+            <column name="user_role_name" value="Teacher"/>
+        </insert>
+        <insert tableName="user_role">
+            <column name="user_role_name" value="Student"/>
+        </insert>
+        
+        <createTable tableName="app_user">
+            <column name="app_user_id" type="serial">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_app_user_app_user_id"/>
+            </column>
+            <column name="first_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="uni_id" type="varchar(255)">
+                <constraints unique="true" uniqueConstraintName="uk_app_user_uni_id"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="uk_app_user_email"/>
+            </column>
+            <column name="hashed_password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_role_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_app_user_user_role_id"
+                             references="user_role(user_role_id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="course">
+            <column name="course_id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_course_course_id"/>
+            </column>
+            <column name="course_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+        </createTable>
+
+        <createTable tableName="course_teacher">
+            <column name="course_teacher_id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_course_teacher_course_teacher_id"/>
+            </column>
+            <column name="course_id" type="INTEGER">
+                <constraints nullable="false" foreignKeyName="fk_course_teacher_course_id"
+                             references="course(course_id)"/>
+            </column>
+            <column name="teacher_id" type="INTEGER">
+                <constraints nullable="false" foreignKeyName="fk_course_teacher_teacher_id"
+                             references="app_user(app_user_id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="enrollment">
+            <column name="enrollment_id" type="serial">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_enrollment_enrollment_id"/>
+            </column>
+            <column name="course_id" type="INTEGER">
+                <constraints nullable="false" foreignKeyName="fk_enrollment_course_id"
+                             references="course(course_id)"/>
+            </column>
+            <column name="student_id" type="INTEGER">
+                <constraints nullable="false" foreignKeyName="fk_enrollment_student_id"
+                             references="app_user(app_user_id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="autotester">
+            <column name="autotester_id" type="serial">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_autotester_autotester_id"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="course_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_autotester_course_id" references="course(course_id)"/>
+            </column>
+            <column name="student_gitlab_url" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tests_gitlab_url" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="student_code_path" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="test_code_path" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="docker_image_url" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gitlab_token" type="TEXT"/>
+        </createTable>
+
+        <createTable tableName="assignment">
+            <column name="assignment_id" type="serial">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_assignment_assignment_id"/>
+            </column>
+            <column name="course_id" type="INTEGER">
+                <constraints nullable="false" foreignKeyName="fk_assignment_course_id"
+                             references="course(course_id)"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="max_grade" type="DECIMAL(5,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="autotester_id" type="INTEGER">
+                <constraints foreignKeyName="fk_assignment_autotester_id"
+                             references="autotester(autotester_id)"/>
+            </column>
+            <column name="due_date" type="DATE"/>
+            <column name="is_autotested" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="grading_element">
+            <column name="grading_element_id" type="serial">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_grading_element_grading_element_id"/>
+            </column>
+            <column name="assignment_id" type="INTEGER">
+                <constraints nullable="false" foreignKeyName="fk_grading_element_assignment_id"
+                             references="assignment(assignment_id)"/>
+            </column>
+            <column name="element_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="max_points" type="DECIMAL(5,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_deduction" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="student_assignment">
+            <column name="student_assignment_id" type="serial">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_student_assignment_student_assignment_id"/>
+            </column>
+            <column name="student_id" type="INTEGER">
+                <constraints nullable="false" foreignKeyName="fk_student_assignment_student_id"
+                             references="app_user(app_user_id)"/>
+            </column>
+            <column name="assignment_id" type="INTEGER">
+                <constraints nullable="false" foreignKeyName="fk_student_assignment_assignment_id"
+                             references="assignment(assignment_id)"/>
+            </column>
+            <column name="submission_url" type="TEXT"/>
+            <column name="grade" type="DECIMAL(5,2)"/>
+            <column name="feedback" type="TEXT"/>
+            <column name="submission_date" type="DATE"/>
+        </createTable>
+
+        <createTable tableName="student_grading_element">
+            <column name="student_grading_element_id" type="serial">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_student_grading_element_student_grading_element_id"/>
+            </column>
+            <column name="student_assignment_id" type="INTEGER">
+                <constraints nullable="false" foreignKeyName="fk_student_grading_element_student_assignment_id"
+                             references="student_assignment(student_assignment_id)"/>
+            </column>
+            <column name="grading_element_id" type="INTEGER">
+                <constraints nullable="false" foreignKeyName="fk_student_grading_element_grading_element_id"
+                             references="grading_element(grading_element_id)"/>
+            </column>
+            <column name="points_awarded" type="DECIMAL(5,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="feedback" type="TEXT"/>
+        </createTable>
+
+        <createTable tableName="configuration">
+            <column name="config_id" type="serial">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_configuration_config_id"/>
+            </column>
+            <column name="config_key" type="varchar(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="uk_configuration_config_key"/>
+            </column>
+            <column name="config_value" type="TEXT"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
