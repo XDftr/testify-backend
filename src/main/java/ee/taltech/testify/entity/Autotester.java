@@ -19,7 +19,12 @@
 
 package ee.taltech.testify.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -31,8 +36,7 @@ import lombok.Setter;
 @Table(name = "autotester", schema = "public")
 public class Autotester {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "autotester_id_gen")
-    @SequenceGenerator(name = "autotester_id_gen", sequenceName = "autotester_autotester_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "autotester_id", nullable = false)
     private Integer id;
 
@@ -42,26 +46,26 @@ public class Autotester {
     private String name;
 
     @NotNull
-    @Column(name = "student_gitlab_url", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "student_gitlab_url", nullable = false)
     private String studentGitlabUrl;
 
     @NotNull
-    @Column(name = "tests_gitlab_url", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "tests_gitlab_url", nullable = false)
     private String testsGitlabUrl;
 
     @NotNull
-    @Column(name = "student_code_path", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "student_code_path", nullable = false)
     private String studentCodePath;
 
     @NotNull
-    @Column(name = "test_code_path", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "test_code_path", nullable = false)
     private String testCodePath;
 
     @NotNull
-    @Column(name = "docker_image_url", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "docker_image_url", nullable = false)
     private String dockerImageUrl;
 
-    @Column(name = "gitlab_token", length = Integer.MAX_VALUE)
+    @Column(name = "gitlab_token")
     private String gitlabToken;
 
 }

@@ -19,7 +19,12 @@
 
 package ee.taltech.testify.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -27,7 +32,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -35,8 +40,7 @@ import java.time.LocalDate;
 @Table(name = "assignment", schema = "public")
 public class Assignment {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "assignment_id_gen")
-    @SequenceGenerator(name = "assignment_id_gen", sequenceName = "assignment_assignment_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "assignment_id", nullable = false)
     private Integer id;
 
@@ -45,15 +49,15 @@ public class Assignment {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "description", length = Integer.MAX_VALUE)
+    @Column(name = "description")
     private String description;
 
     @NotNull
     @Column(name = "max_grade", nullable = false, precision = 5, scale = 2)
     private BigDecimal maxGrade;
 
-    @Column(name = "due_date")
-    private LocalDate dueDate;
+    @Column(name = "due_date_time")
+    private LocalDateTime dueDateTime;
 
     @NotNull
     @ColumnDefault("false")

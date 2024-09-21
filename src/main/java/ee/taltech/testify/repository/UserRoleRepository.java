@@ -17,30 +17,13 @@
  * Copyright (C) 2024 Deniel Konstantinov.
  */
 
-package ee.taltech.testify.entity;
+package ee.taltech.testify.repository;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import ee.taltech.testify.entity.UserRole;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Getter
-@Setter
-@Entity
-@Table(name = "configuration", schema = "public")
-public class Configuration {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "config_id", nullable = false)
-    private Integer id;
+import java.util.Optional;
 
-    @Size(max = 255)
-    @NotNull
-    @Column(name = "config_key", nullable = false, unique = true)
-    private String configKey;
-
-    @Column(name = "config_value")
-    private String configValue;
-
+public interface UserRoleRepository extends JpaRepository<UserRole, Integer> {
+    Optional<UserRole> findByUserRoleName(String name);
 }

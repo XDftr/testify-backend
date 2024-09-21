@@ -19,7 +19,15 @@
 
 package ee.taltech.testify.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,19 +38,18 @@ import lombok.Setter;
 @Table(name = "course_teacher", schema = "public")
 public class CourseTeacher {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_teacher_id_gen")
-    @SequenceGenerator(name = "course_teacher_id_gen", sequenceName = "course_teacher_course_teacher_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_teacher_id", nullable = false)
     private Integer id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "course_id", nullable = false)
-    private ee.taltech.testify.Course course;
+    private Course course;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "teacher_id", nullable = false)
-    private ee.taltech.testify.AppUser teacher;
+    private AppUser teacher;
 
 }

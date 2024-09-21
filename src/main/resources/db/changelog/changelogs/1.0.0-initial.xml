@@ -153,7 +153,7 @@
                 <constraints foreignKeyName="fk_assignment_autotester_id"
                              references="autotester(autotester_id)"/>
             </column>
-            <column name="due_date" type="DATE"/>
+            <column name="due_date_time" type="DATETIME"/>
             <column name="is_autotested" type="BOOLEAN" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
@@ -194,7 +194,7 @@
             <column name="submission_url" type="TEXT"/>
             <column name="grade" type="DECIMAL(5,2)"/>
             <column name="feedback" type="TEXT"/>
-            <column name="submission_date" type="DATE"/>
+            <column name="submission_date_time" type="DATETIME"/>
         </createTable>
 
         <createTable tableName="student_grading_element">

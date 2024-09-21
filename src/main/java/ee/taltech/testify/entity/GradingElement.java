@@ -19,7 +19,15 @@
 
 package ee.taltech.testify.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -34,22 +42,21 @@ import java.math.BigDecimal;
 @Table(name = "grading_element", schema = "public")
 public class GradingElement {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "grading_element_id_gen")
-    @SequenceGenerator(name = "grading_element_id_gen", sequenceName = "grading_element_grading_element_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "grading_element_id", nullable = false)
     private Integer id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "assignment_id", nullable = false)
-    private ee.taltech.testify.Assignment assignment;
+    private Assignment assignment;
 
     @Size(max = 255)
     @NotNull
     @Column(name = "element_name", nullable = false)
     private String elementName;
 
-    @Column(name = "description", length = Integer.MAX_VALUE)
+    @Column(name = "description")
     private String description;
 
     @NotNull

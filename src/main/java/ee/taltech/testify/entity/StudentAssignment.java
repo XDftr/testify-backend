@@ -19,13 +19,21 @@
 
 package ee.taltech.testify.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -33,31 +41,30 @@ import java.time.LocalDate;
 @Table(name = "student_assignment", schema = "public")
 public class StudentAssignment {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_assignment_id_gen")
-    @SequenceGenerator(name = "student_assignment_id_gen", sequenceName = "student_assignment_student_assignment_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "student_assignment_id", nullable = false)
     private Integer id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "student_id", nullable = false)
-    private ee.taltech.testify.AppUser student;
+    private AppUser student;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "assignment_id", nullable = false)
-    private ee.taltech.testify.Assignment assignment;
+    private Assignment assignment;
 
-    @Column(name = "submission_url", length = Integer.MAX_VALUE)
+    @Column(name = "submission_url")
     private String submissionUrl;
 
     @Column(name = "grade", precision = 5, scale = 2)
     private BigDecimal grade;
 
-    @Column(name = "feedback", length = Integer.MAX_VALUE)
+    @Column(name = "feedback")
     private String feedback;
 
-    @Column(name = "submission_date")
-    private LocalDate submissionDate;
+    @Column(name = "submission_date_time")
+    private LocalDateTime submissionDateTime;
 
 }
