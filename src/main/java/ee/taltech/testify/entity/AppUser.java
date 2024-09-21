@@ -24,9 +24,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -35,14 +33,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "app_user", schema = "public", uniqueConstraints = {
-        @UniqueConstraint(name = "uk_app_user_uni_id", columnNames = {"uni_id"}),
-        @UniqueConstraint(name = "uk_app_user_email", columnNames = {"email"})
-})
+@Table(name = "app_user", schema = "public")
 public class AppUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "app_user_id_gen")
-    @SequenceGenerator(name = "app_user_id_gen", sequenceName = "app_user_app_user_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "app_user_id", nullable = false)
     private Integer id;
 
@@ -57,12 +51,12 @@ public class AppUser {
     private String lastName;
 
     @Size(max = 255)
-    @Column(name = "uni_id")
+    @Column(name = "uni_id", unique = true)
     private String uniId;
 
     @Size(max = 255)
     @NotNull
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Size(max = 255)

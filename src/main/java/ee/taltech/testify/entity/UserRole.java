@@ -19,7 +19,12 @@
 
 package ee.taltech.testify.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -28,19 +33,16 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "user_role", schema = "public", uniqueConstraints = {
-        @UniqueConstraint(name = "uk_user_role_user_role_name", columnNames = {"user_role_name"})
-})
+@Table(name = "user_role", schema = "public")
 public class UserRole {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_role_id_gen")
-    @SequenceGenerator(name = "user_role_id_gen", sequenceName = "user_role_user_role_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_role_id", nullable = false)
     private Integer id;
 
-    @Size(max = 50)
+    @Size(max = 50, min = 1)
     @NotNull
-    @Column(name = "user_role_name", nullable = false, length = 50)
+    @Column(name = "user_role_name", nullable = false, length = 50, unique = true)
     private String userRoleName;
 
 }

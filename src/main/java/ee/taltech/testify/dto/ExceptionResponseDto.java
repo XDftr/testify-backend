@@ -17,30 +17,29 @@
  * Copyright (C) 2024 Deniel Konstantinov.
  */
 
-package ee.taltech.testify.entity;
+package ee.taltech.testify.dto;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Builder;
+import lombok.Data;
 
-@Getter
-@Setter
-@Entity
-@Table(name = "configuration", schema = "public")
-public class Configuration {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "config_id", nullable = false)
-    private Integer id;
+import java.time.LocalDateTime;
+import java.util.List;
 
-    @Size(max = 255)
-    @NotNull
-    @Column(name = "config_key", nullable = false, unique = true)
-    private String configKey;
+@Data
+@Builder
+public class ExceptionResponseDto {
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+    private LocalDateTime timestamp;
 
-    @Column(name = "config_value")
-    private String configValue;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String message;
 
+    private int status;
+
+    private String error;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<String> errors;
 }

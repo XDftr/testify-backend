@@ -17,35 +17,17 @@
  * Copyright (C) 2024 Deniel Konstantinov.
  */
 
-package ee.taltech.testify.entity;
+package ee.taltech.testify.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@Entity
-@Table(name = "course", schema = "public")
-public class Course {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "course_id", nullable = false)
-    private Integer id;
-
-    @Size(max = 255)
-    @NotNull
-    @Column(name = "course_name", nullable = false)
-    private String courseName;
-
-    @Column(name = "description")
-    private String description;
-
+@Data
+public class UserRoleRequestDto {
+    @NotNull(message = "User role must not be null")
+    @NotEmpty(message = "User role must not be empty")
+    @Size(min = 1, max = 50, message = "User role name size must be between 1 and 50")
+    private String userRoleName;
 }
